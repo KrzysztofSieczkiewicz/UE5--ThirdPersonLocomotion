@@ -35,9 +35,8 @@ void AAbstractPlayerController::OnPossess(APawn* aPawn)
 	if (ActionMove)
 	{
 		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Triggered, this,
-			&AAbstractPlayerController::HandleMoveTriggered);
-		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Completed, this,
-			&AAbstractPlayerController::HandleMoveCompleted);
+			&AAbstractPlayerController::HandleMove);
+
 	}
 	// ...
 
@@ -60,7 +59,7 @@ void AAbstractPlayerController::HandleLook(const FInputActionValue& InputActionV
 	AddPitchInput(LookAxisVector.Y);
 }
 
-void AAbstractPlayerController::HandleMoveTriggered(const FInputActionValue& InputActionValue)
+void AAbstractPlayerController::HandleMove(const FInputActionValue& InputActionValue)
 {
 	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
 	ForwardInput = MovementVector.Y;
@@ -86,8 +85,4 @@ void AAbstractPlayerController::HandleMoveTriggered(const FInputActionValue& Inp
 
 	PlayerCharacter->AddMovementInput(PlayerCharacter->GetActorForwardVector(), MovementVector.Y);
 	PlayerCharacter->AddMovementInput(PlayerCharacter->GetActorRightVector(), MovementVector.X);
-}
-
-void AAbstractPlayerController::HandleMoveCompleted(const FInputActionValue& InputActionValue)
-{
 }

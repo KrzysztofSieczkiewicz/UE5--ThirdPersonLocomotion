@@ -31,8 +31,7 @@ protected:
 	virtual void OnUnPossess() override;
 
 	void HandleLook(const FInputActionValue& InputActionValue);
-	void HandleMoveTriggered(const FInputActionValue& InputActionValue);
-	void HandleMoveCompleted(const FInputActionValue& InputActionValue);
+	void HandleMove(const FInputActionValue& InputActionValue);
 
 
 private:
