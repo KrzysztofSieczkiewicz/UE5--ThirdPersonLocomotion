@@ -75,4 +75,4 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 
 # Test assets
-Content/TestContent/*
+Content/TestContent/
