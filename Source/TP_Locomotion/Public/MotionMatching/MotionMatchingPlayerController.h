@@ -1,7 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbstractPlayerController.h"
+#include "InputAction.h"
+#include "MotionMatchingCharacter.h"
 #include "MotionMatchingPlayerController.generated.h"
 
 UCLASS(Abstract)
@@ -19,6 +20,7 @@ public:
 	//// INPUT ACTION CONTEXT
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Input|Character Movement")
 	TObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
+
 protected:
 	virtual void OnPossess(APawn* aPawn) override;
 	virtual void OnUnPossess() override;
@@ -33,7 +35,7 @@ private:
 
 	// Store a reference to the Pawn being controlled
 	UPROPERTY()
-	AAbstractThirdPersonCharacter* PlayerCharacter = nullptr;
+	AMotionMatchingCharacter* PlayerCharacter = nullptr;
 
 	// Variables to keep current input value in specific directions
 	UPROPERTY()
