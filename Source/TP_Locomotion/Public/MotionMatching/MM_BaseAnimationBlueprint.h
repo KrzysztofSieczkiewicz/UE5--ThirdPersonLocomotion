@@ -16,14 +16,18 @@ public:
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	mutable bool IsRunning;
+	bool IsRunning;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement|Acceleration")
-	mutable FVector CurrentAcceleration;
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement|Location")
-	mutable FVector WorldLocation;
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement|Rotation")
-	mutable FRotator WorldRotation;
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	FVector CurrentAcceleration;
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	FVector CharacterVelocity;
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	FVector WorldLocation;
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	FRotator WorldRotation;
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	float LocomotionAngle;
 
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaTime) override;
@@ -31,7 +35,6 @@ protected:
 private:
 	UPROPERTY()
 	APawn* CharacterMovementCompReference = nullptr;
-
 	UPROPERTY()
 	AActor* OwningActorReference = nullptr;
 

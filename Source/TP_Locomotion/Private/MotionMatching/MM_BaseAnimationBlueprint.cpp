@@ -18,13 +18,16 @@ void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime
 	WorldLocation = OwningActorReference->GetActorLocation();
 	WorldRotation = OwningActorReference->GetActorRotation();
 
-	// Handle acceleration
 	UCharacterMovementComponent* CharacterMovement = Cast<UCharacterMovementComponent>(
 		CharacterMovementCompReference->GetMovementComponent());
 	if (CharacterMovement)
 	{
+		// Current acceleration
 		CurrentAcceleration = CharacterMovement->GetCurrentAcceleration();
 		CurrentAcceleration.Z = 0.f;
+		// Velocity vector
+		CharacterVelocity = CharacterMovement->Velocity;
+		CharacterVelocity.Z = 0.f;
 	}
 	else
 		CurrentAcceleration = FVector::ZeroVector;
@@ -34,5 +37,8 @@ void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime
 		IsRunning = true;
 	else
 		IsRunning = false;
+
+	// Calculate locomotion angle
+	LocomotionAngle = CalculateDirection(CharacterVelocity, WorldRotation);
 }
 
