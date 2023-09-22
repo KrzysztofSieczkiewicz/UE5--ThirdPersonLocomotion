@@ -7,6 +7,7 @@
 #include "MM_BaseAnimationBlueprint.generated.h"
 
 class AMotionMatchingCharacter;
+//class AActor;
 
 UCLASS()
 class TP_LOCOMOTION_API UMM_BaseAnimationBlueprint : public UAnimInstance
@@ -14,18 +15,25 @@ class TP_LOCOMOTION_API UMM_BaseAnimationBlueprint : public UAnimInstance
 public:
 
 protected:
-	virtual void NativeThreadSafeUpdateAnimation(float DeltaTime) const;
+	UPROPERTY(BlueprintReadOnly)
+	mutable bool IsRunning;
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UCharacterMovementComponent* GetCharacterMovement() const;
-
-private: 
-	UPROPERTY(EditDefaultsOnly, Category = "Player Input|Character Movement|Acceleration")
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement|Acceleration")
 	mutable FVector CurrentAcceleration;
-	UPROPERTY(EditDefaultsOnly, Category = "Player Input|Character Movement|Location")
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement|Location")
 	mutable FVector WorldLocation;
-	UPROPERTY(EditDefaultsOnly, Category = "Player Input|Character Movement|Rotation")
+	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement|Rotation")
 	mutable FRotator WorldRotation;
+
+	virtual void NativeInitializeAnimation() override;
+	virtual void NativeThreadSafeUpdateAnimation(float DeltaTime) override;
+
+private:
+	UPROPERTY()
+	APawn* CharacterMovementCompReference = nullptr;
+
+	UPROPERTY()
+	AActor* OwningActorReference = nullptr;
 
 	GENERATED_BODY()
 	

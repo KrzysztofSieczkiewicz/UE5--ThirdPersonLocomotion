@@ -14,6 +14,7 @@ private:
 protected:
 	
 public:	
+	virtual void Tick(float DeltaTime) override;
 
 	GENERATED_BODY()
 

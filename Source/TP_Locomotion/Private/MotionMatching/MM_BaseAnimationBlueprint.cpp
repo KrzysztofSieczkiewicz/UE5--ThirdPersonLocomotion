@@ -4,26 +4,35 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 
-void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime) const
+void UMM_BaseAnimationBlueprint::NativeInitializeAnimation()
 {
-	WorldLocation = GetOwningActor()->GetActorLocation();
-	WorldRotation = GetOwningActor()->GetActorRotation();
+	// Get Pawn owner on initialization
+	CharacterMovementCompReference = Cast<APawn>(TryGetPawnOwner());
+	OwningActorReference = GetOwningActor();
+}
 
-	UCharacterMovementComponent* CharacterMovement = GetCharacterMovement();
+void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime)
+{
+	if (!CharacterMovementCompReference) return;
+
+	WorldLocation = OwningActorReference->GetActorLocation();
+	WorldRotation = OwningActorReference->GetActorRotation();
+
+	// Handle acceleration
+	UCharacterMovementComponent* CharacterMovement = Cast<UCharacterMovementComponent>(
+		CharacterMovementCompReference->GetMovementComponent());
 	if (CharacterMovement)
 	{
 		CurrentAcceleration = CharacterMovement->GetCurrentAcceleration();
+		CurrentAcceleration.Z = 0.f;
 	}
 	else
-	{
 		CurrentAcceleration = FVector::ZeroVector;
-	}
-}
 
-UCharacterMovementComponent* UMM_BaseAnimationBlueprint::GetCharacterMovement() const
-{
-	// Get current pawn owner. If it's not a character, return nullptr
-	return Cast<UCharacterMovementComponent>(
-		TryGetPawnOwner()->GetMovementComponent());
+	// If character is moving (accceleration vector is non-zero) set IsRunning;
+	if (FMath::Abs(CurrentAcceleration.Size()) > 1e-3)
+		IsRunning = true;
+	else
+		IsRunning = false;
 }
 
