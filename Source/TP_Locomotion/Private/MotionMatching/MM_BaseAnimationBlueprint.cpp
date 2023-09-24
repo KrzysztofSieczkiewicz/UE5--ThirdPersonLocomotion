@@ -3,7 +3,6 @@
 #include "MotionMatching/MM_BaseAnimationBlueprint.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-
 void UMM_BaseAnimationBlueprint::NativeInitializeAnimation()
 {
 	// Get Pawn owner on initialization
@@ -40,5 +39,69 @@ void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime
 
 	// Calculate locomotion angle
 	LocomotionAngle = CalculateDirection(CharacterVelocity, WorldRotation);
+
+	// Calculate and set movement direction
+	LocomotionDirection = CalculateLocomotionDirection(LocomotionAngle,
+		LocomotionDirection,
+		LocomotionDirectionSettings);
+}
+
+E_MM_LocomotionDirection UMM_BaseAnimationBlueprint::CalculateLocomotionDirection(float CurrentLocomotionAngle,
+	E_MM_LocomotionDirection InLocomotionDirection,
+	F_LocomotionDirectionSettings InLocomotionDirectionSettings)
+{
+	// retrieve local vars from settings struct
+	float FMax = InLocomotionDirectionSettings.FMax;
+	float FMin = InLocomotionDirectionSettings.FMin;
+	float BMax = InLocomotionDirectionSettings.BMax;
+	float BMin = InLocomotionDirectionSettings.BMin;
+	float DeadZone = InLocomotionDirectionSettings.DeadZone;
+
+
+	// Account for deadzone so animBP is not jumping between animations with slight camera movements
+	switch (InLocomotionDirection) {
+	case E_MM_LocomotionDirection::F:
+		if (CurrentLocomotionAngle <= FMax + DeadZone &&
+			CurrentLocomotionAngle >= FMin - DeadZone)
+			return E_MM_LocomotionDirection::F;
+		break;
+
+	case E_MM_LocomotionDirection::B:
+		if (!
+			(CurrentLocomotionAngle <= BMax - DeadZone &&
+			CurrentLocomotionAngle >= BMin + DeadZone))
+			return E_MM_LocomotionDirection::B;
+		break;
+
+	case E_MM_LocomotionDirection::R:
+		if (CurrentLocomotionAngle <= BMax + DeadZone &&
+			CurrentLocomotionAngle >= FMax - DeadZone)
+			return E_MM_LocomotionDirection::R;
+		break;
+
+	case E_MM_LocomotionDirection::L:
+		if (CurrentLocomotionAngle <= FMin + DeadZone &&
+			CurrentLocomotionAngle >= BMin - DeadZone)
+			return E_MM_LocomotionDirection::L;
+		break;
+
+	}
+
+	// Is character moving backwards?
+	if (!(CurrentLocomotionAngle >= BMin &&
+		CurrentLocomotionAngle <= BMax))
+		return E_MM_LocomotionDirection::B;
+
+	// Forward?
+	if (CurrentLocomotionAngle >= FMin &&
+		CurrentLocomotionAngle <= FMax)
+		return E_MM_LocomotionDirection::F;
+
+	// Left?
+	if (CurrentLocomotionAngle < 0)
+		return E_MM_LocomotionDirection::L;
+	else
+		return E_MM_LocomotionDirection::R;
+	
 }
 
