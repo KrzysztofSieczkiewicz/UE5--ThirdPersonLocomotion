@@ -82,10 +82,7 @@ void AMotionMatchingPlayerController::HandleMove(const FInputActionValue& InputA
 	PlayerCharacter->AddMovementInput(PlayerCharacter->GetActorRightVector(), MovementVector.X);
 }
 
-void AMotionMatchingPlayerController::PlayerMovementInput(bool IsForwardAxis)
+void AMotionMatchingPlayerController::UpdateGait(E_MM_Gait DesiredGait)
 {
-	if (IsForwardAxis)
-	{
-
-	}
+	CurrentGait = DesiredGait;
 }

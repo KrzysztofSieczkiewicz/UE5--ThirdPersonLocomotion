@@ -11,16 +11,16 @@ struct TP_LOCOMOTION_API F_LocomotionDirectionSettings
 	GENERATED_BODY();
 
 public: 
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion Direction Settings")
+	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
 	float FMin = -65.f;
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion Direction Settings")
+	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
 	float FMax = 65.f;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion Direction Settings")
+	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
 	float BMin = -110.f;
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion Direction Settings")
+	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
 	float BMax = 110.f;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion Direction Settings")
+	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
 	float DeadZone = 10.f;
 };
