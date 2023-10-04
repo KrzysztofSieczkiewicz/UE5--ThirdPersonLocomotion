@@ -1,7 +1,36 @@
 #include "MotionMatching/MotionMatchingPlayerController.h"
 #include "MotionMatching/MotionMatchingCharacter.h"
+#include "MotionMatching/E_MM_Gait.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+
+AMotionMatchingPlayerController::AMotionMatchingPlayerController()
+{
+	// SET VALUES FOR GAITS
+	GaitSettings.Emplace(
+		E_MM_Gait::Walk,
+		{
+			200.f, //MaxWalkSpeed
+			400.f, //MaxAcceleration
+			400.f, //BrakingDecelerationWalking
+			1.f, //BrakingFrictionFactor
+			false, // UseSeparateBrakingFriction
+			0.f //BrakingFriction
+		}
+	);
+	GaitSettings.Emplace(
+		E_MM_Gait::Run,
+		{
+			400.f, //MaxWalkSpeed
+			800.f, //MaxAcceleration
+			800.f, //BrakingDecelerationWalking
+			1.f, //BrakingFrictionFactor
+			false, // UseSeparateBrakingFriction
+			0.f //BrakingFriction
+		}
+	);
+}
 
 void AMotionMatchingPlayerController::OnPossess(APawn* aPawn)
 {
@@ -30,12 +59,21 @@ void AMotionMatchingPlayerController::OnPossess(APawn* aPawn)
 		EnhancedInputComponent->BindAction(ActionLook, ETriggerEvent::Triggered, this,
 			&AMotionMatchingPlayerController::HandleLook);
 	if (ActionMove)
-	{
 		EnhancedInputComponent->BindAction(ActionMove, ETriggerEvent::Triggered, this,
 			&AMotionMatchingPlayerController::HandleMove);
-
+	if (ActionAim)
+	{
+		EnhancedInputComponent->BindAction(ActionAim, ETriggerEvent::Started, this,
+			&AMotionMatchingPlayerController::HandleAimStarted);
+		EnhancedInputComponent->BindAction(ActionAim, ETriggerEvent::Completed, this,
+			&AMotionMatchingPlayerController::HandleAimCompleted);
 	}
+		
 	// ...
+
+
+	// Set default gait on possess
+	UpdateGait(E_MM_Gait::Run);
 }
 
 void AMotionMatchingPlayerController::OnUnPossess()
@@ -82,7 +120,36 @@ void AMotionMatchingPlayerController::HandleMove(const FInputActionValue& InputA
 	PlayerCharacter->AddMovementInput(PlayerCharacter->GetActorRightVector(), MovementVector.X);
 }
 
+void AMotionMatchingPlayerController::HandleAimStarted()
+{
+	UpdateGait(E_MM_Gait::Walk);
+}
+
+void AMotionMatchingPlayerController::HandleAimCompleted()
+{
+	UpdateGait(PreviousGait);
+}
+
+
 void AMotionMatchingPlayerController::UpdateGait(E_MM_Gait DesiredGait)
 {
+	if (!GaitSettings.Contains(DesiredGait))
+		return;
+
+	PreviousGait = CurrentGait;
 	CurrentGait = DesiredGait;
+
+	// Get movement component from current player character
+	UCharacterMovementComponent* MovementComponent = Cast<UCharacterMovementComponent>(PlayerCharacter->GetMovementComponent());
+	
+	// Get settings and values for current gait
+	F_GaitSettings* CurrentGaitValues = GaitSettings.Find(DesiredGait);
+
+	// Assign values to movement component
+	MovementComponent->MaxWalkSpeed = CurrentGaitValues->MaxWalkSpeed;
+	MovementComponent->MaxAcceleration = CurrentGaitValues->MaxAcceleration;
+	MovementComponent->BrakingDecelerationWalking = CurrentGaitValues->BrakingDecelerationWalking;
+	MovementComponent->BrakingFrictionFactor = CurrentGaitValues->BrakingFrictionFactor;
+	MovementComponent->bUseSeparateBrakingFriction = CurrentGaitValues->UseSeparateBrakingFriction;
+	MovementComponent->BrakingFriction = CurrentGaitValues->BrakingFriction;
 }

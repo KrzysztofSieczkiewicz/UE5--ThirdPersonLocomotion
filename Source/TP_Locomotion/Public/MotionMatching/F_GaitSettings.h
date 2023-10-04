@@ -16,7 +16,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
 	float MaxAcceleration = 0.f;
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
-	float MaxBrakingAcceleration = 0.f;
+	float BrakingDecelerationWalking = 0.f;
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
 	float BrakingFrictionFactor = 0.f;
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
