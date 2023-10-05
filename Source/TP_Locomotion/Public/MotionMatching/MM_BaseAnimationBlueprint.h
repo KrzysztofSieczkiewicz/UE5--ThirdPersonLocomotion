@@ -5,15 +5,20 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "E_MM_LocomotionDirection.h"
+#include "BPI_GaitInterface.h"
 #include "F_LocomotionDirectionSettings.h"
 #include "MM_BaseAnimationBlueprint.generated.h"
 
 class AMotionMatchingCharacter;
 
 UCLASS()
-class TP_LOCOMOTION_API UMM_BaseAnimationBlueprint : public UAnimInstance
+class TP_LOCOMOTION_API UMM_BaseAnimationBlueprint : public UAnimInstance, public IBPI_GaitInterface
 {
 public:
+	GENERATED_BODY()
+
+	// GaitInterface
+	virtual bool ReceiveGaitData(E_MM_Gait GaitData) override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -51,6 +56,6 @@ private:
 		E_MM_LocomotionDirection InLocomotionDirection,
 		F_LocomotionDirectionSettings InLocomotionDirectionSettings);
 
-	GENERATED_BODY()
-	
+	UPROPERTY()
+	E_MM_Gait CurrentGait;	
 };

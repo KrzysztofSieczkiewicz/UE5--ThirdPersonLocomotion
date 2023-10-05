@@ -1,6 +1,7 @@
 #include "MotionMatching/MotionMatchingPlayerController.h"
 #include "MotionMatching/MotionMatchingCharacter.h"
 #include "MotionMatching/E_MM_Gait.h"
+#include "MotionMatching/MM_BaseAnimationBlueprint.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -138,6 +139,11 @@ void AMotionMatchingPlayerController::UpdateGait(E_MM_Gait DesiredGait)
 
 	PreviousGait = CurrentGait;
 	CurrentGait = DesiredGait;
+
+
+	// Get animation instance from current player character and assign gait
+	UMM_BaseAnimationBlueprint* AnimBlueprint = Cast<UMM_BaseAnimationBlueprint>(PlayerCharacter->GetMesh()->GetAnimInstance());
+	AnimBlueprint->ReceiveGaitData(DesiredGait);
 
 	// Get movement component from current player character
 	UCharacterMovementComponent* MovementComponent = Cast<UCharacterMovementComponent>(PlayerCharacter->GetMovementComponent());

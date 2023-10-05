@@ -3,6 +3,13 @@
 #include "MotionMatching/MM_BaseAnimationBlueprint.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+bool UMM_BaseAnimationBlueprint::ReceiveGaitData(E_MM_Gait GaitData)
+{
+	CurrentGait = GaitData;
+
+	return false; // TODO: later - replace this with boolean confirming success of assigning gait (extend assign with e.g. cast)
+}
+
 void UMM_BaseAnimationBlueprint::NativeInitializeAnimation()
 {
 	// Get Pawn owner on initialization
@@ -37,13 +44,16 @@ void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime
 	else
 		IsRunning = false;
 
+
 	// Calculate locomotion angle
 	LocomotionAngle = CalculateDirection(CharacterVelocity, WorldRotation);
-
 	// Calculate and set movement direction
 	LocomotionDirection = CalculateLocomotionDirection(LocomotionAngle,
 		LocomotionDirection,
 		LocomotionDirectionSettings);
+
+
+
 }
 
 E_MM_LocomotionDirection UMM_BaseAnimationBlueprint::CalculateLocomotionDirection(float CurrentLocomotionAngle,

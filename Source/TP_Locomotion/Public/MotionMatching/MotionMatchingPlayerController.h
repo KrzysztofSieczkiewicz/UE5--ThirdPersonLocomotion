@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "InputAction.h"
-#include "F_GaitSettings.h"
+#include "MotionMatching/F_GaitSettings.h"
 #include "MotionMatching/E_MM_Gait.h"
 #include "MotionMatchingCharacter.h"
 #include "MotionMatchingPlayerController.generated.h"
