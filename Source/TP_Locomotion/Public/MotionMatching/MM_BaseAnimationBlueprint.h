@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "E_MM_LocomotionDirection.h"
+#include "MotionMatching/E_MM_LocomotionDirection.h"
+#include "MotionMatching/F_LocomotionDirectionSettings.h"
 #include "BPI_GaitInterface.h"
-#include "F_LocomotionDirectionSettings.h"
 #include "MM_BaseAnimationBlueprint.generated.h"
 
 class AMotionMatchingCharacter;
@@ -19,6 +19,11 @@ public:
 
 	// GaitInterface
 	virtual bool ReceiveGaitData(E_MM_Gait GaitData) override;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
+	E_MM_Gait CurrentGait;
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
+	E_MM_LocomotionDirection LocomotionDirection;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
@@ -34,13 +39,6 @@ protected:
 	FRotator WorldRotation;
 	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	float LocomotionAngle;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
-	E_MM_LocomotionDirection LocomotionDirection;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
-	E_MM_Gait CurrentGait;
-
 
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaTime) override;

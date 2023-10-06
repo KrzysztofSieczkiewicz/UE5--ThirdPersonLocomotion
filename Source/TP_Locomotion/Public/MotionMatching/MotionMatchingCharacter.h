@@ -19,7 +19,7 @@ public:
 	UFUNCTION()
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void UpdateGait(E_MM_Gait DesiredGait);
 
 	// Store current gait character is using and previous (allows for 'return to previous state')
