@@ -21,22 +21,25 @@ public:
 	virtual bool ReceiveGaitData(E_MM_Gait GaitData) override;
 
 protected:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	bool IsRunning;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	FVector CurrentAcceleration;
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	FVector CharacterVelocity;
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	FVector WorldLocation;
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	FRotator WorldRotation;
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	float LocomotionAngle;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Player Input|Character Movement")
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	E_MM_LocomotionDirection LocomotionDirection;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
+	E_MM_Gait CurrentGait;
 
 
 	virtual void NativeInitializeAnimation() override;
@@ -54,8 +57,5 @@ private:
 	UFUNCTION()
 	E_MM_LocomotionDirection CalculateLocomotionDirection(float CurrentLocomotionAngle,
 		E_MM_LocomotionDirection InLocomotionDirection,
-		F_LocomotionDirectionSettings InLocomotionDirectionSettings);
-
-	UPROPERTY()
-	E_MM_Gait CurrentGait;	
+		F_LocomotionDirectionSettings InLocomotionDirectionSettings);	
 };
