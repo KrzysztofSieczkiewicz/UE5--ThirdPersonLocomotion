@@ -6,32 +6,6 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
-AMotionMatchingPlayerController::AMotionMatchingPlayerController()
-{
-	// SET VALUES FOR GAITS
-	GaitSettings.Emplace(
-		E_MM_Gait::Walk,
-		{
-			200.f, //MaxWalkSpeed
-			400.f, //MaxAcceleration
-			400.f, //BrakingDecelerationWalking
-			1.f, //BrakingFrictionFactor
-			false, // UseSeparateBrakingFriction
-			0.f //BrakingFriction
-		}
-	);
-	GaitSettings.Emplace(
-		E_MM_Gait::Run,
-		{
-			400.f, //MaxWalkSpeed
-			800.f, //MaxAcceleration
-			800.f, //BrakingDecelerationWalking
-			1.f, //BrakingFrictionFactor
-			false, // UseSeparateBrakingFriction
-			0.f //BrakingFriction
-		}
-	);
-}
 
 void AMotionMatchingPlayerController::OnPossess(APawn* aPawn)
 {
@@ -71,10 +45,6 @@ void AMotionMatchingPlayerController::OnPossess(APawn* aPawn)
 	}
 		
 	// ...
-
-
-	// Set default gait on possess
-	UpdateGait(E_MM_Gait::Run);
 }
 
 void AMotionMatchingPlayerController::OnUnPossess()
@@ -123,39 +93,10 @@ void AMotionMatchingPlayerController::HandleMove(const FInputActionValue& InputA
 
 void AMotionMatchingPlayerController::HandleAimStarted()
 {
-	UpdateGait(E_MM_Gait::Walk);
+	PlayerCharacter->UpdateGait(E_MM_Gait::Walk);
 }
 
 void AMotionMatchingPlayerController::HandleAimCompleted()
 {
-	UpdateGait(PreviousGait);
-}
-
-
-void AMotionMatchingPlayerController::UpdateGait(E_MM_Gait DesiredGait)
-{
-	if (!GaitSettings.Contains(DesiredGait))
-		return;
-
-	PreviousGait = CurrentGait;
-	CurrentGait = DesiredGait;
-
-
-	// Get animation instance from current player character and assign gait
-	UMM_BaseAnimationBlueprint* AnimBlueprint = Cast<UMM_BaseAnimationBlueprint>(PlayerCharacter->GetMesh()->GetAnimInstance());
-	AnimBlueprint->ReceiveGaitData(DesiredGait);
-
-	// Get movement component from current player character
-	UCharacterMovementComponent* MovementComponent = Cast<UCharacterMovementComponent>(PlayerCharacter->GetMovementComponent());
-	
-	// Get settings and values for current gait
-	F_GaitSettings* CurrentGaitValues = GaitSettings.Find(DesiredGait);
-
-	// Assign values to movement component
-	MovementComponent->MaxWalkSpeed = CurrentGaitValues->MaxWalkSpeed;
-	MovementComponent->MaxAcceleration = CurrentGaitValues->MaxAcceleration;
-	MovementComponent->BrakingDecelerationWalking = CurrentGaitValues->BrakingDecelerationWalking;
-	MovementComponent->BrakingFrictionFactor = CurrentGaitValues->BrakingFrictionFactor;
-	MovementComponent->bUseSeparateBrakingFriction = CurrentGaitValues->UseSeparateBrakingFriction;
-	MovementComponent->BrakingFriction = CurrentGaitValues->BrakingFriction;
+	PlayerCharacter->UpdateGait(PlayerCharacter->PreviousGait);
 }

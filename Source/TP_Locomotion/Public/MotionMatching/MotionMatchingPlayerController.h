@@ -11,8 +11,6 @@ UCLASS(Abstract)
 class TP_LOCOMOTION_API AMotionMatchingPlayerController : public APlayerController
 {
 public:
-	AMotionMatchingPlayerController();
-
 	//// INPUT ACTIONS
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Player Input|Character Movement")
 	TObjectPtr<UInputAction> ActionMove = nullptr;
@@ -50,16 +48,6 @@ private:
 	float ForwardInput;
 	UPROPERTY()
 	float SideInput;
-
-	// Store current gait character is using
-	UPROPERTY()
-	E_MM_Gait PreviousGait;
-	UPROPERTY()
-	E_MM_Gait CurrentGait;
-	UPROPERTY()
-	TMap<E_MM_Gait, F_GaitSettings> GaitSettings;
-	UFUNCTION()
-	void UpdateGait(E_MM_Gait DesiredGait);
 
 	GENERATED_BODY()
 };
