@@ -11,17 +11,17 @@ struct TP_LOCOMOTION_API F_GaitSettings
 	GENERATED_BODY();
 
 public:
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
+	UPROPERTY(BlueprintReadOnly)
 	float MaxWalkSpeed = 0.f;
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
+	UPROPERTY(BlueprintReadOnly)
 	float MaxAcceleration = 0.f;
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
+	UPROPERTY(BlueprintReadOnly)
 	float BrakingDecelerationWalking = 0.f;
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
+	UPROPERTY(BlueprintReadOnly)
 	float BrakingFrictionFactor = 0.f;
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
+	UPROPERTY(BlueprintReadOnly)
 	bool UseSeparateBrakingFriction = 0.f;
-	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Gait settings")
+	UPROPERTY(BlueprintReadOnly)
 	float BrakingFriction = 0.f;
 
 
