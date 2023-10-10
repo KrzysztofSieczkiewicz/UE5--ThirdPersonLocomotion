@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "MotionMatching/E_MM_LocomotionDirection.h"
+#include "MotionMatching/E_HipFacing.h"
 #include "MotionMatching/F_LocomotionDirectionSettings.h"
 #include "BPI_GaitInterface.h"
 #include "MM_BaseAnimationBlueprint.generated.h"
@@ -24,6 +25,8 @@ public:
 	E_MM_Gait CurrentGait;
 	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	E_MM_LocomotionDirection LocomotionDirection;
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
+	E_HipFacing HipDirection;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
@@ -45,7 +48,7 @@ protected:
 
 private:
 	UPROPERTY()
-	APawn* CharacterMovementCompReference = nullptr;
+	APawn* CharacterMovementComponentRef = nullptr;
 	UPROPERTY()
 	AActor* OwningActorReference = nullptr;
 

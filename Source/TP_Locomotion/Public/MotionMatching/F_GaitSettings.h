@@ -8,9 +8,9 @@
 USTRUCT(BlueprintType)
 struct TP_LOCOMOTION_API F_GaitSettings
 {
+public:
 	GENERATED_BODY();
 
-public:
 	UPROPERTY(BlueprintReadOnly)
 	float MaxWalkSpeed = 0.f;
 	UPROPERTY(BlueprintReadOnly)

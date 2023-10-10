@@ -13,19 +13,19 @@ bool UMM_BaseAnimationBlueprint::ReceiveGaitData(E_MM_Gait GaitData)
 void UMM_BaseAnimationBlueprint::NativeInitializeAnimation()
 {
 	// Get Pawn owner on initialization
-	CharacterMovementCompReference = Cast<APawn>(TryGetPawnOwner());
+	CharacterMovementComponentRef = Cast<APawn>(TryGetPawnOwner());
 	OwningActorReference = GetOwningActor();
 }
 
 void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime)
 {
-	if (!CharacterMovementCompReference) return;
+	if (!CharacterMovementComponentRef) return;
 
 	WorldLocation = OwningActorReference->GetActorLocation();
 	WorldRotation = OwningActorReference->GetActorRotation();
 
 	UCharacterMovementComponent* CharacterMovement = Cast<UCharacterMovementComponent>(
-		CharacterMovementCompReference->GetMovementComponent());
+		CharacterMovementComponentRef->GetMovementComponent());
 	if (CharacterMovement)
 	{
 		// Current acceleration
@@ -48,12 +48,12 @@ void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime
 	// Calculate locomotion angle
 	LocomotionAngle = CalculateDirection(CharacterVelocity, WorldRotation);
 	// Calculate and set movement direction
-	LocomotionDirection = CalculateLocomotionDirection(LocomotionAngle,
+	LocomotionDirection = CalculateLocomotionDirection(
+		LocomotionAngle,
 		LocomotionDirection,
 		LocomotionDirectionSettings);
 
-
-
+	
 }
 
 E_MM_LocomotionDirection UMM_BaseAnimationBlueprint::CalculateLocomotionDirection(float CurrentLocomotionAngle,
@@ -97,21 +97,53 @@ E_MM_LocomotionDirection UMM_BaseAnimationBlueprint::CalculateLocomotionDirectio
 
 	}
 
-	// Is character moving backwards?
+	// CHECK CURRENT CHARACTER DIRECTION
+	// BASED ON CURRENT AND PREVIOUS DIRECTION -> SET HIP FACING DIRECTION
 	if (!(CurrentLocomotionAngle >= BMin &&
-		CurrentLocomotionAngle <= BMax))
+		CurrentLocomotionAngle <= BMax)) // BACKWARDS
+	{
+		HipDirection = E_HipFacing::B;
 		return E_MM_LocomotionDirection::B;
+	}
 
-	// Forward?
 	if (CurrentLocomotionAngle >= FMin &&
-		CurrentLocomotionAngle <= FMax)
+		CurrentLocomotionAngle <= FMax) // FORWARD
+	{
+		HipDirection = E_HipFacing::F;
 		return E_MM_LocomotionDirection::F;
-
-	// Left?
-	if (CurrentLocomotionAngle < 0)
-		return E_MM_LocomotionDirection::L;
-	else
-		return E_MM_LocomotionDirection::R;
+	}
 	
+	if (CurrentLocomotionAngle < 0) // LEFT
+	{
+		switch (LocomotionDirection) {
+		case E_MM_LocomotionDirection::F:
+			HipDirection = E_HipFacing::F;
+			break;
+		case E_MM_LocomotionDirection::B:
+			HipDirection = E_HipFacing::B;
+			break;
+		case E_MM_LocomotionDirection::R:
+			HipDirection = (HipDirection == E_HipFacing::F) ? E_HipFacing::B : E_HipFacing::F;
+			break;
+		}
+		return E_MM_LocomotionDirection::L;
+
+	}
+	else if (CurrentLocomotionAngle > 0)  // RIGHT
+	{
+		switch (LocomotionDirection) {
+		case E_MM_LocomotionDirection::F:
+			HipDirection = E_HipFacing::F;
+			break;
+		case E_MM_LocomotionDirection::B:
+			HipDirection = E_HipFacing::B;
+			break;
+		case E_MM_LocomotionDirection::L:
+			HipDirection = (HipDirection == E_HipFacing::F) ? E_HipFacing::B : E_HipFacing::F;
+		}
+		return E_MM_LocomotionDirection::R;
+
+	}
+	return E_MM_LocomotionDirection::F;
 }
 
