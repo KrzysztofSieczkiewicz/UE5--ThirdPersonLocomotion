@@ -17,9 +17,9 @@ public:
 	float FMax = 65.f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
-	float BMin = -125.f;
+	float BMin = -115.f;
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
-	float BMax = 125.f;
+	float BMax = 115.f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Locomotion|Direction Settings")
 	float DeadZone = 10.f;
