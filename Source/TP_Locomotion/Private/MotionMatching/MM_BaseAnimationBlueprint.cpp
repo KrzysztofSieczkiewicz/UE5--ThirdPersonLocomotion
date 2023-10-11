@@ -3,6 +3,14 @@
 #include "MotionMatching/MM_BaseAnimationBlueprint.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+UMM_BaseAnimationBlueprint::UMM_BaseAnimationBlueprint()
+{
+	DesiredHipDirection.Emplace(E_MM_LocomotionDirection::F, E_HipFacing::F);
+	DesiredHipDirection.Emplace(E_MM_LocomotionDirection::B, E_HipFacing::B);
+	DesiredHipDirection.Emplace(E_MM_LocomotionDirection::R, E_HipFacing::F);
+	DesiredHipDirection.Emplace(E_MM_LocomotionDirection::L, E_HipFacing::F);
+}
+
 bool UMM_BaseAnimationBlueprint::ReceiveGaitData(E_MM_Gait GaitData)
 {
 	CurrentGait = GaitData;
@@ -146,4 +154,3 @@ E_MM_LocomotionDirection UMM_BaseAnimationBlueprint::CalculateLocomotionDirectio
 	}
 	return E_MM_LocomotionDirection::F;
 }
-

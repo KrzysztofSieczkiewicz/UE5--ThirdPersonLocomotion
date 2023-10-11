@@ -18,6 +18,8 @@ class TP_LOCOMOTION_API UMM_BaseAnimationBlueprint : public UAnimInstance, publi
 public:
 	GENERATED_BODY()
 
+	UMM_BaseAnimationBlueprint();
+
 	// GaitInterface
 	virtual bool ReceiveGaitData(E_MM_Gait GaitData) override;
 
@@ -25,8 +27,10 @@ public:
 	E_MM_Gait CurrentGait;
 	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
 	E_MM_LocomotionDirection LocomotionDirection;
-	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
+	UPROPERTY(BlueprintReadWrite, Category = "Character Movement")
 	E_HipFacing HipDirection;
+	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
+	TMap<E_MM_LocomotionDirection, E_HipFacing> DesiredHipDirection;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Movement")
