@@ -38,10 +38,10 @@ void UMM_BaseAnimationBlueprint::NativeThreadSafeUpdateAnimation(float DeltaTime
 	{
 		// Current acceleration
 		CurrentAcceleration = CharacterMovement->GetCurrentAcceleration();
-		CurrentAcceleration.Z = 0.f;
+		//CurrentAcceleration.Z = 0.f;
 		// Velocity vector
 		CharacterVelocity = CharacterMovement->Velocity;
-		CharacterVelocity.Z = 0.f;
+		//CharacterVelocity.Z = 0.f;
 	}
 	else
 		CurrentAcceleration = FVector::ZeroVector;
@@ -105,7 +105,7 @@ E_MM_LocomotionDirection UMM_BaseAnimationBlueprint::CalculateLocomotionDirectio
 
 	}
 
-	// CHECK CURRENT CHARACTER DIRECTION
+	// CHECK CURRENT CHARACTER DIRECTION WITH DEADZONES
 	// BASED ON CURRENT AND PREVIOUS DIRECTION -> SET HIP FACING DIRECTION
 	if (!(CurrentLocomotionAngle >= BMin &&
 		CurrentLocomotionAngle <= BMax)) // BACKWARDS

@@ -24,7 +24,7 @@ AMotionMatchingCharacter::AMotionMatchingCharacter()
 	GaitSettings.Emplace(
 		E_MM_Gait::Run,
 		{
-			400.f, //MaxWalkSpeed
+			600.f, //MaxWalkSpeed
 			800.f, //MaxAcceleration
 			800.f, //BrakingDecelerationWalking
 			1.f, //BrakingFrictionFactor
